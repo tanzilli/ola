@@ -1,0 +1,8 @@
+{
+  "name": "node-red-project",
+  "description": "A Node-RED Project",
+  "version": "0.0.1",
+  "dependencies": {
+    "node-red-contrib-uibuilder": "~1.2.2"
+  }
+}

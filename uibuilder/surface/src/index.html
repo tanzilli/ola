@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>AcmeDmx control panel</title>
+    <meta name="description" content="Node-RED UI Builder">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <link rel="stylesheet" href="./acme.css">
+
+</head>
+<body>
+
+
+	<div class="row">
+		<div class="column">
+			<table border="1px">
+				<tr>
+					<td><label class="switch"><input id="par1" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td rowspan=3 colspan=3><canvas onmousemove="getxy(event)" id="xypad"></canvas></td>
+					<td><label class="switch"><input id="par9" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td rowspan="2" nowrap>
+						<input id="range_red"        type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();" >
+						<input id="range_green"      type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+						<input id="range_blue"       type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+						<input id="range_white"      type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();" >
+						<input id="range_brightness" type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+						<input id="range_speed"      type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+					</td>
+				</tr>
+				<tr>
+					<td><label class="switch"><input id="par2" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td><label class="switch"><input id="par8" type="checkbox"><span class="slider_switch"></span></label></td>
+				</tr>
+				<tr>
+					<td><label class="switch"><input id="par3" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td><label class="switch"><input id="par7" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td>
+						<code style="color: red;" id="red">00</code>
+						<code style="color: green;" id="green">00</code>
+						<code style="color: blue;" id="blue">00</code>
+						<code style="color: grey;" id="white">00</code>
+						<code style="color: black;" id="brightness">00</code>
+						<code style="color: black;" id="speed">00</code>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><label class="switch"><input id="par4" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td><label class="switch"><input id="par5" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td><label class="switch"><input id="par6" type="checkbox"><span class="slider_switch"></span></label></td>
+					<td>
+					<button onclick="click_button()">CLICK</button> 
+					</td>
+					<td id="color_display" style="background-color: #FF0000; text-align: left;"></td>
+				</tr>
+				<tr>
+					<td colspan="1">
+						<code>
+							P1 (01)<br/>
+							P2 (09)<br/>
+							P3 (18)<br/>
+							P4 (27)<br/>
+							P5 (36)<br/>
+							P6 (45)<br/>
+							P7 (54)<br/>
+							P8 (63)<br/>
+							P9 (72)<br/>
+						</code>
+					</td>
+					<td colspan="3" style="background-color: black; color: green; text-align: left;">
+						<code id="dmxbuffer">
+						</code>
+					</td>
+					<td colspan="2">
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="column">
+		</div>
+	</div>		
+
+	<div class="row">
+		<span>
+			Pan:   <code id="pan">00</code> 
+			Tilt:  <code id="tilt">00</code>
+		</span>
+	</div>
+	
+    <div id="msg">
+        <code id="showMsgSent"></code>
+        <code id="showMsg"></code>
+    </div>
+
+    <script src="/uibuilder/socket.io/socket.io.js"></script>
+    <script src="./vendor/jquery/dist/jquery.min.js"></script>
+    <script src="./uibuilderfe.min.js"></script>
+    <script src="./acme.js"></script>
+    <script src="./index.js"></script>
+	
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="acme.js"></script>
+	-->
+	
+</body>
+</html>
