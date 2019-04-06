@@ -1,10 +1,25 @@
 var mouseDown = 0;
 var dmxbuffer = new Uint8Array(81);
 
-// Convert an int to ASCII hex
 
+uibuilder.onChange('msg', function(newVal){
+    //$('#showMsg').text("RX: " + JSON.stringify(newVal));
+    $('#rxmsg').text(newVal.payload);
+	dmxbuffer=JSON.parse("[" + newVal.payload + "]");
+	dumpDMXbuffer();
+});
+
+uibuilder.onChange('msgsSent', function(newVal){
+    console.info('New msg sent to Node-RED over Socket.IO. Total Count: ', newVal);
+    $('#rxmsg').text(newVal);
+    //$('#txmsg').text(JSON.stringify(uibuilder.get('sentMsg')))
+    //$('#txmsg').text(uibuilder.get('sentMsg'));
+});
+
+
+// Convert an int to ASCII hex
 function toHex(d) {
-    return  ("0"+(Number(d).toString(16))).slice(-2).toUpperCase()
+    return  ("0"+(Number(d).toString(16))).slice(-2).toUpperCase();
 }
 
 function dumpDMXbuffer() {
@@ -19,7 +34,9 @@ function dumpDMXbuffer() {
 		ascii_dump+="<br/>";
 	}
 	$("#dmxbuffer").html(ascii_dump);
-	uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer});
+	//uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer});
+	uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer.toString()});
+	$('#txmsg').text(dmxbuffer.toString());
 
 }
 
@@ -27,19 +44,88 @@ document.onmousedown = function() {
 	if (mouseDown<=0) {
 		++mouseDown;
 	}
-}
+};
 
 document.onmouseup = function() {
 	if (mouseDown>=0) {
 		--mouseDown;
 	}
+};
+
+function off_button() {
+//	uibuilder.send({"topic":"click","payload":true});
+	document.getElementById("range_red").value=0;
+	document.getElementById("range_green").value=0;
+	document.getElementById("range_blue").value=0;
+	document.getElementById("range_white").value=0;
+	buffer_update();
 }
 
-function click_button() {
-	uibuilder.send({"topic":"click","payload":true});
+function red_button() {
+	document.getElementById("range_red").value=255;
+	document.getElementById("range_green").value=0;
+	document.getElementById("range_blue").value=0;
+	document.getElementById("range_white").value=0;
+	buffer_update();
 }
 
-function buffer_update(id,value) {
+function green_button() {
+	document.getElementById("range_red").value=0;
+	document.getElementById("range_green").value=255;
+	document.getElementById("range_blue").value=0;
+	document.getElementById("range_white").value=0;
+	buffer_update();
+}
+
+function blue_button() {
+	document.getElementById("range_red").value=0;
+	document.getElementById("range_green").value=0;
+	document.getElementById("range_blue").value=255;
+	document.getElementById("range_white").value=0;
+	buffer_update();
+}
+
+function white_button() {
+	document.getElementById("range_red").value=0;
+	document.getElementById("range_green").value=0;
+	document.getElementById("range_blue").value=0;
+	document.getElementById("range_white").value=255;
+	buffer_update();
+}
+
+function yellow_button() {
+	document.getElementById("range_red").value=255;
+	document.getElementById("range_green").value=255;
+	document.getElementById("range_blue").value=0;
+	document.getElementById("range_white").value=0;
+	buffer_update();
+}
+
+function magenta_button() {
+	document.getElementById("range_red").value=255;
+	document.getElementById("range_green").value=0;
+	document.getElementById("range_blue").value=255;
+	document.getElementById("range_white").value=0;
+	buffer_update();
+}
+
+function all_button() {
+	//alert(document.getElementById("all_button").value);
+	if ($("#all_button").text()=="ALL") {
+		for (i=1;i<=9;i++) {
+			document.getElementById("par" + i).checked=true;
+		}
+		$("#all_button").text("NONE");
+	} else {
+		for (i=1;i<=9;i++) {
+			document.getElementById("par" + i).checked=false;
+		}
+		$("#all_button").text("ALL");
+	}
+}
+
+
+function buffer_update() {
 
 	var red=document.getElementById("range_red").value;
 	var green=document.getElementById("range_green").value;
@@ -75,22 +161,20 @@ var context;
 
 function getxy(e){
 	if (mouseDown==1) {
-		canvas = document.getElementById("xypad");
-		context = canvas.getContext("2d");
 
 		var posx = e.clientX-$("#xypad").offset().left;
 		var posy = e.clientY-$("#xypad").offset().top;
 
 		if (posx<0) posx=0;
-		if (posx>200) posx=200;
+		if (posx>320) posx=320;
 		if (posy<0) posy=0;
-		if (posy>200) posy=200;
+		if (posy>160) posy=160;
 
 		//context.fillStyle = "#000000";
 		//context.fillRect (posx, posy, 4, 4);		
 		
-		var pan=Math.round((posx/(200/255)));
-		var tilt=Math.round((posy/(200/255)));
+		var pan=Math.round((posx/(320/170)));
+		var tilt=Math.round((posy/(160/255)));
 
 		$("#pan").html(pan);
 		$("#tilt").html(tilt);
@@ -110,9 +194,19 @@ $(document).ready(function() {
 	for (i=0;i<dmxbuffer.byteLength;i++) dmxbuffer[i]=0;
 	dumpDMXbuffer();
 
+	canvas = document.getElementById("xypad");
+	context = canvas.getContext("2d");
+
+	$(".save_button").click(function() {
+	    //$('#debug_msg').text("Save button");
+	    $('#debug_msg').text($(this).prev().val());
+	});
+		
+	$(".load_button").click(function() {
+	    //$('#debug_msg').text("Load button");
+	    $('#debug_msg').text($(this).next().val());
+	});
+
 	//setInterval(function(){ dumpDMXbuffer(); }, 500);
 
-//	$("#range_red").change(function() {
-//		$("#red").html($("#range_red").val());
-//	});
 }); 

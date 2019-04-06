@@ -1,8 +1,32 @@
+body {
+	font-family: sans-serif;
+	margin: 8px; 
+}
+
+/*
+div { 
+	margin: 2px; 
+	padding: 0px;
+}
+*/
+
 #xypad {
 	width: 320px;
-	height: 240px;
+	height: 160px;
 	background-color: lightgrey;
 }		
+
+table {
+  border: 0px solid black;
+}
+
+td {
+  border: 1px solid lightgrey;
+}
+ 
+.td_command {
+  border: 0px solid grey;
+}
 
 canvas {
 	border-style: solid;

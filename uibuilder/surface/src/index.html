@@ -2,30 +2,73 @@
 <html>
 <head>
     <meta charset="utf-8">
-
-    <title>AcmeDmx control panel</title>
-    <meta name="description" content="Node-RED UI Builder">
+    <title>Tanzo DMX</title>
+    <meta name="description" content="Tanzo DMX control panel">
+    <link rel="stylesheet" href="./vendor/normalize.css/normalize.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <link rel="stylesheet" href="./acme.css">
 
 </head>
 <body>
-
-
 	<div class="row">
 		<div class="column">
-			<table border="1px">
+			<h2>TanzoDMX Control Panel</h2>
+		</div>
+	</div>	
+	<div class="row">
+		<div class="column">
+			<table>
 				<tr>
 					<td><label class="switch"><input id="par1" type="checkbox"><span class="slider_switch"></span></label></td>
 					<td rowspan=3 colspan=3><canvas onmousemove="getxy(event)" id="xypad"></canvas></td>
 					<td><label class="switch"><input id="par9" type="checkbox"><span class="slider_switch"></span></label></td>
-					<td rowspan="2" nowrap>
+					<td rowspan="2" align="center" nowrap>
 						<input id="range_red"        type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();" >
+						<br/>
+						<code style="color: red;" id="red">00</code>
+					</td>
+					<td rowspan="2" align="center" nowrap>
 						<input id="range_green"      type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+						<br/>
+						<code style="color: green;" id="green">00</code>
+					</td>
+					<td rowspan="2" align="center" nowrap>
 						<input id="range_blue"       type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+						<br/>
+						<code style="color: blue;" id="blue">00</code>
+					</td>
+					<td rowspan="2" align="center" nowrap>
 						<input id="range_white"      type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();" >
-						<input id="range_brightness" type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+						<br/>
+						<code style="color: grey;" id="white">00</code>
+					</td>
+					<td rowspan="2" align="center" nowrap>
+						<input id="range_brightness" type="range" min="0" max="127" step="1" value="0" class="slider" oninput="buffer_update();">
+						<br/>
+						<code style="color: black;" id="brightness">00</code>
+					</td>
+					<td rowspan="2" align="center" nowrap>
 						<input id="range_speed"      type="range" min="0" max="255" step="1" value="0" class="slider" oninput="buffer_update();">
+						<br/>
+						<code style="color: black;" id="speed">00</code>
+					</td>
+					<td rowspan="5" align="center"  valign="top" nowrap>
+						<table>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 1"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 2"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 3"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 4"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 5"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 6"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 7"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 8"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 9"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 10"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 11"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 12"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 13"/><button class="save_button">Save</button></td></tr>
+							<tr><td class="td_command" align="center" ><button class="load_button">Load</button><input value="Scena 14"/><button class="save_button">Save</button></td></tr>
+						</table>
 					</td>
 				</tr>
 				<tr>
@@ -35,24 +78,24 @@
 				<tr>
 					<td><label class="switch"><input id="par3" type="checkbox"><span class="slider_switch"></span></label></td>
 					<td><label class="switch"><input id="par7" type="checkbox"><span class="slider_switch"></span></label></td>
-					<td>
-						<code style="color: red;" id="red">00</code>
-						<code style="color: green;" id="green">00</code>
-						<code style="color: blue;" id="blue">00</code>
-						<code style="color: grey;" id="white">00</code>
-						<code style="color: black;" id="brightness">00</code>
-						<code style="color: black;" id="speed">00</code>
-					</td>
+					<td align="center" ><button onclick="red_button()">R</button></td>
+					<td align="center" ><button onclick="green_button()">G</button></td>
+					<td align="center" ><button onclick="blue_button()">B</button></td>
+					<td align="center" ><button onclick="white_button()">W</button></td>
+					<td align="center" ><button onclick="yellow_button()">Y</button></td>
+					<td align="center" ><button onclick="magenta_button()">M</button></td>
 				</tr>
 				<tr>
-					<td></td>
+					<td align="center" >
+					<button id="all_button" onclick="all_button()">ALL</button> 
+					</td>
 					<td><label class="switch"><input id="par4" type="checkbox"><span class="slider_switch"></span></label></td>
 					<td><label class="switch"><input id="par5" type="checkbox"><span class="slider_switch"></span></label></td>
 					<td><label class="switch"><input id="par6" type="checkbox"><span class="slider_switch"></span></label></td>
-					<td>
-					<button onclick="click_button()">CLICK</button> 
+					<td align="center" >
+					<button onclick="off_button()">OFF</button> 
 					</td>
-					<td id="color_display" style="background-color: #FF0000; text-align: left;"></td>
+					<td colspan="6" id="color_display" style="background-color: #FF0000; text-align: left;"></td>
 				</tr>
 				<tr>
 					<td colspan="1">
@@ -72,33 +115,34 @@
 						<code id="dmxbuffer">
 						</code>
 					</td>
-					<td colspan="2">
+					<td colspan="7">
 					</td>
 				</tr>
 			</table>
 		</div>
 		
-		<div class="column">
-		</div>
 	</div>		
 
 	<div class="row">
-		<span>
-			Pan:   <code id="pan">00</code> 
-			Tilt:  <code id="tilt">00</code>
-		</span>
+		<div class="column">
+			<p>
+				Pan:   <code id="pan">00</code> 
+				Tilt:  <code id="tilt">00</code>
+				
+		        TX: [<span id="txmsg"></span>]
+		        <br/>
+		        RX: [<span id="rxmsg"></span>]
+		        <br/>
+		        DB: [<span id="debug_msg"></span>]
+			</p>
+		</div>
 	</div>
 	
-    <div id="msg">
-        <code id="showMsgSent"></code>
-        <code id="showMsg"></code>
-    </div>
-
     <script src="/uibuilder/socket.io/socket.io.js"></script>
     <script src="./vendor/jquery/dist/jquery.min.js"></script>
     <script src="./uibuilderfe.min.js"></script>
     <script src="./acme.js"></script>
-    <script src="./index.js"></script>
+    <!--<script src="./index.js"></script>-->
 	
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="acme.js"></script>

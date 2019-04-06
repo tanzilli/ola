@@ -71,10 +71,8 @@
  */
 'use strict'
 
-
 // When JQuery is ready, update
 $( document ).ready(function() {
-
     // Initial set
     $('#msgsReceived').text( uibuilder.get('msgsReceived') )
     $('#msgsControl').text( uibuilder.get('msgsCtrl') )
@@ -88,25 +86,9 @@ $( document ).ready(function() {
     // If msg changes - msg is updated when a standard msg is received from Node-RED over Socket.IO
     // Note that you can also listen for 'msgsReceived' as they are updated at the same time
     // but newVal relates to the attribute being listened to.
-    
     uibuilder.onChange('msg', function(newVal){
-        console.info('indexjs:msg: property msg has changed! ', newVal);
-        $('#showMsg').text(JSON.stringify(newVal));
-
-		if (newVal["topic"]=="photo") {       
-			
-			var canvas = document.getElementById("xypad");
-			var context = canvas.getContext("2d");
-			var myImg = new Image();
-
-			myImg.onload = function () {
-			
-				context.drawImage(myImg, 0, 0);
-			};
-			
-			myImg.src = newVal["file"] + "?" + Math.random();
-		}
-		
+        console.info('indexjs:msg: property msg has changed! ', newVal)
+        $('#showMsg').text(JSON.stringify(newVal))
         //uibuilder.set('msgCopy', newVal)
     })
 
@@ -158,11 +140,16 @@ $( document ).ready(function() {
         $('#showCtrlMsg').text(JSON.stringify(uibuilder.get('ctrlMsg')))
     })
 
+    //Manually send a message back to Node-RED after 2 seconds
+    window.setTimeout(function(){
+        console.info('indexjs:setTimeout: Sending a message back to Node-RED - after 2s delay')
+        uibuilder.send( { 'topic':'uibuilderfe', 'payload':'I am a message sent from the uibuilder front end (index.js)' } )
+    }, 2000)
+
     // Manually send a control message. Include cacheControl:REPLAY to test cache handling
     // Shouldn't be needed in this example since window.load will also send cacheControl and we should
     // be done before then.
     uibuilder.sendCtrl({'cacheControl': 'REPLAY'})
-    
 
 }) // --- End of JQuery Ready --- //
 

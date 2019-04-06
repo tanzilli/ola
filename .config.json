@@ -483,6 +483,24 @@
      "file": "/home/pi/.node-red/node_modules/node-red-contrib-uibuilder/nodes/uibuilder.js"
     }
    }
+  },
+  "node-red-node-sqlite": {
+   "name": "node-red-node-sqlite",
+   "version": "0.3.6",
+   "local": true,
+   "nodes": {
+    "sqlite": {
+     "name": "sqlite",
+     "types": [
+      "sqlitedb",
+      "sqlite"
+     ],
+     "enabled": true,
+     "local": true,
+     "module": "node-red-node-sqlite",
+     "file": "/home/pi/.node-red/node_modules/node-red-node-sqlite/sqlite.js"
+    }
+   }
   }
  },
  "_credentialSecret": "90a7c3389b509d4f0403c7df749f0090578f81c5ca3d11745b6a367ad0fab8d6",
