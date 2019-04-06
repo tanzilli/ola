@@ -1,7 +1,6 @@
 var mouseDown = 0;
 var dmxbuffer = new Uint8Array(81);
 
-
 uibuilder.onChange('msg', function(newVal){
     //$('#showMsg').text("RX: " + JSON.stringify(newVal));
     $('#rxmsg').text(newVal.payload);
@@ -11,7 +10,8 @@ uibuilder.onChange('msg', function(newVal){
 
 uibuilder.onChange('msgsSent', function(newVal){
     console.info('New msg sent to Node-RED over Socket.IO. Total Count: ', newVal);
-    $('#rxmsg').text(newVal);
+    var dmxbuf=Array.from(Object.keys(newVal), k=>newVal[k])
+    $('#rxmsg').text(dmxbuf);
     //$('#txmsg').text(JSON.stringify(uibuilder.get('sentMsg')))
     //$('#txmsg').text(uibuilder.get('sentMsg'));
 });
@@ -34,8 +34,8 @@ function dumpDMXbuffer() {
 		ascii_dump+="<br/>";
 	}
 	$("#dmxbuffer").html(ascii_dump);
-	//uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer});
-	uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer.toString()});
+	uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer});
+	//uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer.toString()});
 	$('#txmsg').text(dmxbuffer.toString());
 
 }
