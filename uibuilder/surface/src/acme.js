@@ -1,25 +1,22 @@
 var mouseDown = 0;
 var dmxbuffer = new Uint8Array(81);
 
-/*
-uibuilder.onChange('msgsSent', function(newVal){
-    console.info('New msg sent to Node-RED over Socket.IO. Total Count: ', newVal);
-    //var dmxbuffer=Array.from(Object.keys(newVal), k=>newVal[k])
-    $('#txmsg').text(JSON.stringify(newVal));
-    //$('#txmsg').text(JSON.stringify(uibuilder.get('sentMsg')))
-    //$('#txmsg').text(uibuilder.get('sentMsg'));
-});
-*/
-
 uibuilder.onChange('msg', function(newVal){
-    //$('#showMsg').text("RX: " + JSON.stringify(newVal));
-    var dmxbuf=Array.from(Object.keys(newVal.payload), k=>newVal.payload[k]);
-    
-    $('#rxmsg').text(dmxbuf.toString());
-	//dmxbuffer=JSON.parse("[" + newVal.payload + "]");
-	dmxbuffer=dmxbuf;
-	dumpDMXbuffer();
-});
+	if (newVal.topic=="dmxbuf") {
+	    var dmxbuf=Array.from(Object.keys(newVal.payload), k=>newVal.payload[k]);
+	    
+	    $('#rxmsg').text(dmxbuf.toString());
+		dmxbuffer=dmxbuf;
+		dumpDMXbuffer();
+	}
+	
+	if (newVal.topic=="slot") {
+		$('#rxmsg').text("Incoming slot");
+		for (var i=0;i<newVal.payload.length;i++) {
+			$("#slot_" + newVal.payload[i]["slot"]).val(newVal.payload[i]["name"])
+		}
+	}
+});	
 
 
 // Convert an int to ASCII hex
@@ -40,7 +37,6 @@ function dumpDMXbuffer() {
 	}
 	$("#dmxbuffer").html(ascii_dump);
 	uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer});
-	//uibuilder.send({"topic":"dmxbuf","payload":dmxbuffer.toString()});
 	$('#txmsg').text(dmxbuffer.toString());
 
 }
@@ -58,7 +54,6 @@ document.onmouseup = function() {
 };
 
 function off_button() {
-//	uibuilder.send({"topic":"click","payload":true});
 	document.getElementById("range_red").value=0;
 	document.getElementById("range_green").value=0;
 	document.getElementById("range_blue").value=0;
@@ -115,7 +110,6 @@ function magenta_button() {
 }
 
 function all_button() {
-	//alert(document.getElementById("all_button").value);
 	if ($("#all_button").text()=="ALL") {
 		for (i=1;i<=9;i++) {
 			document.getElementById("par" + i).checked=true;
@@ -130,8 +124,9 @@ function all_button() {
 }
 
 
-function buffer_update() {
+// Aggiorna il buffer DMX in ram in base allo stato dei singoli slider	
 
+function buffer_update() {
 	var red=document.getElementById("range_red").value;
 	var green=document.getElementById("range_green").value;
 	var blue=document.getElementById("range_blue").value;
@@ -175,9 +170,6 @@ function getxy(e){
 		if (posy<0) posy=0;
 		if (posy>160) posy=160;
 
-		//context.fillStyle = "#000000";
-		//context.fillRect (posx, posy, 4, 4);		
-		
 		var pan=Math.round((posx/(320/170)));
 		var tilt=Math.round((posy/(160/255)));
 
@@ -190,7 +182,6 @@ function getxy(e){
 				dmxbuffer[(i-1)*9+1]=tilt;
 			}
 		}
-		
 		dumpDMXbuffer();
 	}
 }
@@ -202,16 +193,22 @@ $(document).ready(function() {
 	canvas = document.getElementById("xypad");
 	context = canvas.getContext("2d");
 
-	$(".save_button").click(function() {
-	    //$('#debug_msg').text("Save button");
-	    $('#debug_msg').text($(this).prev().val());
+	$(".save_button").dblclick(function() {
+		var name = $(this).prev().val();
+		var slot = $(this).attr("slot");
+	    $('#debug_msg').text("Save \"" + name + "\""  + " Slot: " + slot);
+		uibuilder.send({"topic":"save","name":name,"slot":slot});
+		$(this).prev().css("background-color","red");	
+		setTimeout(function(a){ a.css("background-color","white"); }, 500, $(this).prev());
 	});
 		
 	$(".load_button").click(function() {
-	    //$('#debug_msg').text("Load button");
-	    $('#debug_msg').text($(this).next().val());
+		var scene_name = $(this).next().val();
+	    $('#debug_msg').text("Load \"" + scene_name + "\"");
+		uibuilder.send({"topic":"load","payload":scene_name});
 	});
 
-	//setInterval(function(){ dumpDMXbuffer(); }, 500);
+	uibuilder.send({"topic":"init"});
 
+	//setInterval(function(){ dumpDMXbuffer(); }, 500);
 }); 
